@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_companyVNET_name": {
+            "defaultValue": "companyVNET",
+            "type": "String"
+        },
+        "subnets_firstCompanySubnet_name": {
+            "defaultValue": "firstCompanySubnet",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_companyVNET_name')]",
+            "apiVersion": "2018-12-01",
+            "location": "uksouth",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "08ab0e43-0be6-4f89-8bb6-baad8808fcff",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "firstCompanySubnet",
+                        "etag": "W/\"6ac615d3-b6ef-44e1-a86d-242a7850e0db\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.0.1.0/24",
+                            "delegations": []
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_companyVNET_name'), '/', parameters('subnets_firstCompanySubnet_name'))]",
+            "apiVersion": "2018-12-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.0.1.0/24",
+                "delegations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_companyVNET_name'))]"
+            ]
+        }
+    ]
+}

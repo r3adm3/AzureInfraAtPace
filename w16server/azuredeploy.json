@@ -1,0 +1,198 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "defaultValue": "uksouth",
+            "type": "String"
+        },
+        "networkInterfaceName": {
+            "defaultValue": "singlevm155",
+            "type": "String"
+        },
+        "networkSecurityGroupName": {
+            "defaultValue": "singlevm-nsg",
+            "type": "String"
+        },
+        "networkSecurityGroupRules": {
+            "defaultValue": [{"name":"RDP","properties":{"priority":300,"protocol":"TCP","access":"Allow","direction":"Inbound","sourceAddressPrefix":"*","sourcePortRange":"*","destinationAddressPrefix":"*","destinationPortRange":"3389"}}],
+            "type": "Array"
+        },
+        "subnetName": {
+            "defaultValue": "default",
+            "type": "String"
+        },
+        "virtualNetworkName": {
+            "defaultValue": "singleVM-vnet",
+            "type": "String"
+        },
+        "addressPrefixes": {
+            "defaultValue": ["10.1.0.0/24"],
+            "type": "Array"
+        },
+        "subnets": {
+            "defaultValue": [{"name":"default","properties":{"addressPrefix":"10.1.0.0/24"}}],
+            "type": "Array"
+        },
+        "publicIpAddressName": {
+            "defaultValue": "singlevm-ip",
+            "type": "String"
+        },
+        "publicIpAddressType": {
+            "defaultValue": "Dynamic",
+            "type": "String"
+        },
+        "publicIpAddressSku": {
+            "defaultValue": "Basic",
+            "type": "String"
+        },
+        "virtualMachineName": {
+            "defaultValue": "singlevm",
+            "type": "String"
+        },
+        "virtualMachineRG": {
+            "defaultValue": "singleVM",
+            "type": "String"
+        },
+        "osDiskType": {
+            "defaultValue": "Standard_LRS",
+            "type": "String"
+        },
+        "virtualMachineSize": {
+            "defaultValue": "Standard_DS1_v2",
+            "type": "String"
+        },
+        "adminUsername": {
+            "defaultValue": "myadmin",
+            "type": "String"
+        },
+        "adminPassword": {
+            "type": "SecureString"
+        }
+    },
+    "variables": {
+        "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
+        "vnetId": "[resourceId(resourceGroup().name,'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaceName')]",
+            "apiVersion": "2018-10-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+                            }
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[variables('nsgId')]"
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]",
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+                "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIpAddressName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroupName')]",
+            "apiVersion": "2018-08-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "securityRules": "[parameters('networkSecurityGroupRules')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworkName')]",
+            "apiVersion": "2018-08-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": "[parameters('addressPrefixes')]"
+                },
+                "subnets": "[parameters('subnets')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIpAddresses",
+            "sku": {
+                "name": "[parameters('publicIpAddressSku')]"
+            },
+            "name": "[parameters('publicIpAddressName')]",
+            "apiVersion": "2018-08-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "publicIpAllocationMethod": "[parameters('publicIpAddressType')]"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachineName')]",
+            "apiVersion": "2018-06-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('virtualMachineSize')]"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "managedDisk": {
+                            "storageAccountType": "[parameters('osDiskType')]"
+                        }
+                    },
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter-smalldisk",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachineName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'))]"
+            ]
+        }
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "String",
+            "value": "[parameters('adminUsername')]"
+        }
+    }
+}
