@@ -28,6 +28,23 @@
                 "adminPassword":  {"value": "[parameters('adminPasswordServer')]"}
                 }
             }
+        },{
+            "apiVersion": "2017-05-10",
+            "name": "servergroup1-testserver2",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri": "[variables('windowstemplateURI')]",
+                "contentVersion": "1.0.0.0"
+                },
+            "parameters":{
+                "networkResourceGroupName": {"value":"[parameters('networkResourceGroupName')]"},
+                "virtualMachineName":{"value": "testserver2"},
+                "adminUserName":  {"value": "[parameters('adminUserNameServer')]"},
+                "adminPassword":  {"value": "[parameters('adminPasswordServer')]"}
+                }
+            }
         }
     ],
     "outputs": {}
