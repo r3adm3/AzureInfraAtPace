@@ -1,0 +1,123 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkResourceGroupName":{
+            "type": "string"
+        },
+        "virtualMachineName": {
+            "type": "string"
+        },
+        "adminUserName": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        }
+    },
+    "variables": {
+        "vnetId": "[resourceId(parameters('networkResourceGroupName'),'Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
+        "location": "uksouth",
+        "virtualMachineSize": "Standard_D2s_v3",
+        "virtualNetworkName": "companyVNET",
+        "networkInterfaceName": "[concat(parameters('virtualMachineName'),'-NIC')]",
+        "subnetName": "firstCompanySubnet", 
+        "StandardAppsURL": "https://raw.githubusercontent.com/r3adm3/AzureInfraAtPace/w16serverwtools/master/standardtools.ps1",
+        "StandardAppsScriptFolder": ".",
+        "StandardAppsScriptFileName": "standardtools.ps1"
+  	},
+    "resources": [
+        {
+            "name": "[parameters('virtualMachineName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2018-04-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]"
+            ],
+            "properties": {
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachineName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "windowsConfiguration": {
+                        "provisionVmAgent": "true"
+                    }
+                },
+                "hardwareProfile": {
+                    "vmSize": "[variables('virtualMachineSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+                        }
+                    ]
+                },
+                "resources": [
+                    {
+                        "name": "InstallStandardApps",
+                        "type": "extensions",
+                        "location": "[resourceGroup().location]",
+                        "apiVersion": "2017-12-01",
+                        "dependsOn": [
+                            "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName')]"
+                        ],
+                        "tags": {
+                            "displayName": "Install Standard Applications"
+                        },
+                        "properties": {
+                            "publisher": "Microsoft.Compute",
+                            "type": "CustomScriptExtension",
+                            "typeHandlerVersion": "1.4",
+                            "autoUpgradeMinorVersion": true,
+                            "settings": {
+                                "fileUris": [
+                                    "[variables('StandardAppsURL')]"
+                                ],
+                                "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('StandardAppsScriptFolder'), '/', variables('StandardAppsScriptFileName'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('networkInterfaceName')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-04-01",
+            "location": "[variables('location')]",
+            "dependsOn": [],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {
+    }
+}
