@@ -8,7 +8,7 @@
     },
     "variables": {
         "windowstemplateURI": "https://raw.githubusercontent.com/r3adm3/AzureInfraAtPace/master/w16server/azuredeploy.json",
-        "sqltemplateURI": "https://raw.githubusercontent.com/r3adm3/AzureInfraAtPace/master/sql16server/azuredeploy.json"
+        "win16wtoolstemplateURI": "https://raw.githubusercontent.com/r3adm3/AzureInfraAtPace/master/w16serverwtools/azuredeploy.json"
     },
     "resources": [
         {
@@ -35,7 +35,7 @@
             "properties": {
             "mode": "Incremental",
             "templateLink": {
-                "uri": "[variables('windowstemplateURI')]",
+                "uri": "[variables('win16wtoolstemplateURI')]",
                 "contentVersion": "1.0.0.0"
                 },
             "parameters":{
