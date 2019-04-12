@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="3" errors="0" failures="1" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2019-04-12" time="21:47:23">
+  <environment user-domain="" os-version="4.18.0-17-generic" platform="Linux" user="adrian" machine-name="ARAGOG" nunit-version="2.5.8.0" cwd="/home/adrian/Source/github/AzureInfraAtPace/w16serverwtests" clr-version="Unknown" />
+  <culture-info current-culture="en-GB" current-uiculture="en-GB" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Failure" success="False" time="3.0502" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="/home/adrian/Source/github/AzureInfraAtPace/w16serverwtests/azuredeploy.unit.tests.ps1" executed="True" result="Failure" success="False" time="3.0502" asserts="0" description="/home/adrian/Source/github/AzureInfraAtPace/w16serverwtests/azuredeploy.unit.tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="AIaPservergroup1 Deployment Tests" executed="True" result="Failure" success="False" time="3.0155" asserts="0" description="AIaPservergroup1 Deployment Tests">
+            <results>
+              <test-suite type="TestFixture" name="When AIaPservergroup1 template is deployed" executed="True" result="Failure" success="False" time="2.953" asserts="0" description="When AIaPservergroup1 template is deployed">
+                <results>
+                  <test-case description="Has a JSON template" name="AIaPservergroup1 Deployment Tests.When AIaPservergroup1 template is deployed.Has a JSON template" time="0.0129" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Converts from JSON and has the expected properties" name="AIaPservergroup1 Deployment Tests.When AIaPservergroup1 template is deployed.Converts from JSON and has the expected properties" time="0.0429" asserts="0" success="True" result="Success" executed="True" />
+                  <test-case description="Should be deployed successfully" name="AIaPservergroup1 Deployment Tests.When AIaPservergroup1 template is deployed.Should be deployed successfully" time="0.0251" asserts="0" success="False" result="Failure" executed="True">
+                    <failure>
+                      <message>Expected 'Succeeded', but got $null.</message>
+                      <stack-trace>at &lt;ScriptBlock&gt;, /home/adrian/Source/github/AzureInfraAtPace/w16serverwtests/azuredeploy.unit.tests.ps1: line 59
+59:       $result.provisioningState | Should -Be "Succeeded"</stack-trace>
+                    </failure>
+                  </test-case>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
