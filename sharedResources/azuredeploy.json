@@ -4,11 +4,11 @@
     "parameters": {
         "virtualNetworks_companyVNET_name": {
             "defaultValue": "companyVNET",
-            "type": "String"
+            "type": "string"
         },
         "subnets_firstCompanySubnet_name": {
             "defaultValue": "firstCompanySubnet",
-            "type": "String"
+            "type": "string"
         }
     },
     "variables": {},

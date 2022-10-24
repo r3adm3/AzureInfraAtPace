@@ -7,7 +7,7 @@ This ARM Template will spin up a single Windows server, with extra tools using c
 or via code...
 
 ```Powershell
-new-azurermresourcegroupdeployment -resourcegroupname servergroup1 -templatefile .\azuredeploy.json
+New-AzureRmResourceGroupDeployment -ResourceGroup engReskill_rg -TemplateFile .\azuredeploy.json -TemplateParameterFile .\parametersfile.json
 ```
 
 This ARM template is dependent on the sharedResources deployment.
