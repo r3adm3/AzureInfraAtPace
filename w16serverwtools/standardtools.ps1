@@ -15,12 +15,23 @@ $packages = 'googlechrome', `
             'visualstudiocode', `
             'git', `
             'microsoft-teams', `
-            'dotnet-sdk'
+            'dotnet-sdk', `
+            'setdefaultbrowser'
 
 forEach ($packageName in $packages){
     choco install $packageName -y --ignore-checksums
 }
 
+write-host "Setting Default Browser to Chrome"
+setdefaultbrowser chrome
+
+write-host "Disabling IE Security Config"
+Disable-InternetExplorerESC
+
 get-date | set-content c:\windows\temp\installFinished.txt
  
+
+
+
+
 

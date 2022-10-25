@@ -7,5 +7,11 @@ This template puts in resources which are referred to by other templates.
 To execute this ARM Template:
 
 ```Powershell
+Login-AzAccount
+
+Get-AzSubscription
+
+Select-AzSubscription [SubsId]
+
 new-azurermresourcegroupdeployment -resourcegroupname sharedResources -templatefile .\azuredeploy.json
 ```
