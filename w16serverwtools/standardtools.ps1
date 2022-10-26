@@ -14,7 +14,7 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://com
 $packages = 'googlechrome', `
             'visualstudiocode', `
             'git', `
-            'microsoft-teams', `
+            'microsoft-teams.install', `
             'dotnet-sdk', `
             'setdefaultbrowser'
 
