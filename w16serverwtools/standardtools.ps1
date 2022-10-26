@@ -22,7 +22,7 @@ forEach ($packageName in $packages){
 }
 
 write-host "Installing teams"
-choco install microsoft-teams.install --params "'/AllUsers /NoAutoStart'"
+choco install microsoft-teams.install --params "'/AllUser /AllUsers /NoAutoStart'"
 
 write-host "Setting Default Browser to Chrome"
 setdefaultbrowser chrome
