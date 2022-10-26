@@ -14,13 +14,15 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://com
 $packages = 'googlechrome', `
             'visualstudiocode', `
             'git', `
-            'microsoft-teams.install', `
             'dotnet-sdk', `
             'setdefaultbrowser'
 
 forEach ($packageName in $packages){
     choco install $packageName -y --ignore-checksums
 }
+
+write-host "Installing teams"
+choco install microsoft-teams.install --params "'/AllUsers /NoAutoStart'"
 
 write-host "Setting Default Browser to Chrome"
 setdefaultbrowser chrome

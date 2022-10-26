@@ -6,13 +6,13 @@
             "value": "engreskill_rg"
         },
         "virtualMachineName": {
-            "value": "lion"
+            "value": "puma"
         },
         "adminUserName": {
-            "value": "valuehere"
+            "value": "studentadmin"
         },
         "adminPassword": {
-            "value": "somepassword"
+            "value": "n0m1nal!p@ssw0rd"
         }
         
     }
