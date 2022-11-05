@@ -19,7 +19,7 @@
         "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
         "vnetId": "[variables('virtualNetworkId')]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
-        "virtualMachineSize": "Standard_D2s_v3",
+        "virtualMachineSize": "Standard_B1s",
         "osDiskType": "Standard_LRS",
         "virtualMachineRG" : "AIaPsingleVM",
         "publicIpAddressType": "Dynamic",

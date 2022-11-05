@@ -24,7 +24,7 @@
         "diagnosticsExtensionName": "IaaSDiagnostics",
         "ouPath": "OU=Servers,OU=Compute,DC=lnvfdev,DC=local",
         "location": "westeurope",
-        "virtualMachineSize": "Standard_D2s_v3",
+        "virtualMachineSize": "Standard_B1s",
         "virtualNetworkName": "adVNET",
         "networkInterfaceName": "[concat(parameters('virtualMachineName'),'-NIC')]",
         "diagnosticsStorageAccountName": "vfenv1rgdiag860",

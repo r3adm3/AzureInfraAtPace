@@ -19,7 +19,7 @@
         "vnetId": "[resourceId(parameters('networkResourceGroupName'),'Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
         "location": "uksouth",
-        "virtualMachineSize": "Standard_D2s_v3",
+        "virtualMachineSize": "Standard_B1s",
         "virtualNetworkName": "companyVNET",
         "networkInterfaceName": "[concat(parameters('virtualMachineName'),'-NIC')]",
         "subnetName": "firstCompanySubnet", 
