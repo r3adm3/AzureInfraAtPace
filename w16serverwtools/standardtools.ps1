@@ -15,16 +15,15 @@ $packages = 'googlechrome', `
             'visualstudiocode', `
             'git', `
             'dotnet-sdk', `
-            'microsoft-teams', `
-            'rustdesk', `
             'setdefaultbrowser'
 
 forEach ($packageName in $packages){
     choco install $packageName -y --ignore-checksums
 }
 
-write-host "Copy Teams install to AllUsers Desktop"
-copy-item C:\Windows\Temp\chocolatey\microsoft-teams\1.5.00.28361\Teams_windows_x64.exe C:\Users\Public\Desktop
+
+write-host "Install Remote Assistance"
+install-windowsfeature remote-assistance
 
 write-host "Setting Default Browser to Chrome"
 setdefaultbrowser chrome
